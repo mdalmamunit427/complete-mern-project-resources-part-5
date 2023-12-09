@@ -3,10 +3,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaFacebookF, FaGithub, FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../contexts/AuthProvider";
+import axios from "axios";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
   const [errorMessage, seterrorMessage] = useState("");
-  const { signUpWithGmail, login } = useContext(AuthContext);
+  const { signUpWithGmail, login } = useAuth();
+  const axiosPublic = useAxiosPublic();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,9 +31,18 @@ const Login = () => {
       .then((result) => {
         // Signed in
         const user = result.user;
+        const userInfor = {
+          name: data.name,
+          email: data.email,
+        };
+        axiosPublic
+          .post("/users", userInfor)
+          .then((response) => {
+            // console.log(response);
+            alert("Signin successful!");
+            navigate(from, { replace: true });
+          });
         // console.log(user);
-        alert("Login successful!");
-        navigate(from);
         // ...
       })
       .catch((error) => {
@@ -41,11 +54,22 @@ const Login = () => {
   };
 
   // login with google
+  // login with google
   const handleRegister = () => {
     signUpWithGmail()
       .then((result) => {
         const user = result.user;
-        navigate(from);
+        const userInfor = {
+          name: result?.user?.displayName,
+          email: result?.user?.email,
+        };
+        axiosPublic
+          .post("/users", userInfor)
+          .then((response) => {
+            // console.log(response);
+            alert("Signin successful!");
+            navigate("/");
+          });
       })
       .catch((error) => console.log(error));
   };

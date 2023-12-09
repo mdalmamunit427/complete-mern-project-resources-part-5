@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaFacebookF, FaGithub, FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../contexts/AuthProvider";
+import axios from "axios";
 
 const Modal = () => {
   const [errorMessage, seterrorMessage] = useState("");
@@ -27,10 +28,18 @@ const Modal = () => {
       .then((result) => {
         // Signed in
         const user = result.user;
+        const userInfor = {
+          name: data.name,
+          email: data.email,
+        };
+        axios
+          .post("http://localhost:6001/users", userInfor)
+          .then((response) => {
+            // console.log(response);
+            alert("Signin successful!");
+            navigate(from, { replace: true });
+          });
         // console.log(user);
-        alert("Login successful!");
-        navigate(from, { replace: true });
-        document.getElementById("my_modal_5").close()
         // ...
       })
       .catch((error) => {
@@ -46,7 +55,17 @@ const Modal = () => {
     signUpWithGmail()
       .then((result) => {
         const user = result.user;
-        navigate('/', { replace: true });
+        const userInfor = {
+          name: result?.user?.displayName,
+          email: result?.user?.email,
+        };
+        axios
+          .post("http://localhost:6001/users", userInfor)
+          .then((response) => {
+            // console.log(response);
+            alert("Signin successful!");
+            navigate("/");
+          });
       })
       .catch((error) => console.log(error));
   };

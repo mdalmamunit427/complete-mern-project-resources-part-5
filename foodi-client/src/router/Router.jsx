@@ -8,6 +8,9 @@ import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import UserProfile from "../pages/dashboard/UserProfile";
 import CartPage from "../pages/menuPage/CartPage";
 import Login from "../components/Login";
+import DashboardLayout from "../layout/DashboardLayout";
+import Dashboard from "../pages/dashboard/admin/Dashboard";
+import Users from "../pages/dashboard/admin/Users";
 
 const router = createBrowserRouter([
     {
@@ -43,6 +46,20 @@ const router = createBrowserRouter([
     {
       path: "/login",
       element: <Login/>
+    },
+    {
+      path: 'dashboard',
+      element: <PrivateRoute><DashboardLayout/></PrivateRoute>,
+      children: [
+        {
+          path: '',
+          element: <Dashboard/>
+        },
+        {
+          path: 'users', 
+          element: <Users/>
+        }
+      ]
     }
   ]);
 
