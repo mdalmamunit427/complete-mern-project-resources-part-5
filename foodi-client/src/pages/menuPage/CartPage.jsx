@@ -9,6 +9,7 @@ import axios from "axios";
 const CartPage = () => {
   const { user } = useContext(AuthContext);
   const [cart, refetch] = useCart();
+  console.log(cart)
   const [cartItems, setCartItems] = useState([]);
   // console.log(cartItems)
 
